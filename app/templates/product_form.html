@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-4">
+    <h2 class="text-center">{{ 'Editar Producto' if product else 'Agregar producto' }}</h2>
+    
+    <!-- Mostrar mensaje de éxito si existe -->
+    {% if success_message %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ success_message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <form method="POST" class="p-4 border rounded shadow-sm bg-light">
+        <!-- Nombre del Producto -->
+        <div class="mb-3">
+            <label for="name" class="form-label">Nombre del producto:</label>
+            <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                class="form-control" 
+                placeholder="Ingresa el nombre del producto" 
+                value="{{ product.name if product else '' }}" 
+                required>
+        </div>
+
+        <!-- Stock -->
+        <div class="mb-3">
+            <label for="stock" class="form-label">Stock:</label>
+            <input 
+                type="number" 
+                id="stock" 
+                name="stock" 
+                class="form-control" 
+                placeholder="Cantidad en inventario" 
+                value="{{ product.stock if product else 0 }}" 
+                min="0" 
+                required>
+        </div>
+
+        <!-- Precio -->
+        <div class="mb-3">
+            <label for="price" class="form-label">Precio:</label>
+            <input 
+                type="number" 
+                id="price" 
+                name="price" 
+                class="form-control" 
+                placeholder="Precio del producto" 
+                step="0.01" 
+                value="{{ product.price if product else 0 }}" 
+                min="0" 
+                required>
+        </div>
+
+        <!-- Categoría -->
+        <div class="mb-3">
+            <label for="category_id" class="form-label">Categoría:</label>
+            <select id="category_id" name="category_id" class="form-select" required>
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if product and product.category_id == category.id %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <form method="POST">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </form> 
+        <!-- Botones -->
+        <div class="d-flex justify-content-between">
+            <a href="{{ url_for('routes.index') }}" class="btn btn-primary">Volver al inicio</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

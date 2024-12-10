@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-4">
+    <h2 class="text-center">Productos</h2>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        {% for product in products %}
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <!-- Nombre del producto -->
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    
+                    <!-- Detalles del producto -->
+                    <p class="card-text">
+                        <strong>Stock:</strong> {{ product.stock }}
+                        {% if product.is_low_stock() %}
+                        <span class="text-danger">(Bajo inventario)</span>
+                        {% endif %}
+                        <br>
+                        <strong>Precio:</strong> ${{ "%.2f" | format(product.price) }}
+                        <br>
+                        <strong>Categoría:</strong> {{ product.category.name }}
+                    </p>
+                    
+                    <!-- Botones de acción -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('routes.manage_product', product_id=product.id) }}" class="btn btn-sm btn-primary">Editar</a>
+                        <a href="{{ url_for('routes.delete_product', product_id=product.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
